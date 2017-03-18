@@ -67,14 +67,24 @@ def close_db(error):
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
 
-
+'''
 @app.route('/')
 def show_entries():
     db = get_db()
     cur = db.execute('select title, text from entries order by id desc')
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
+'''
+@app.route('/show')
+def show_entries():
+    db = get_db()
+    cur = db.execute('select title, text from entries order by id desc')
+    entries = cur.fetchall()
+    return render_template('show_entries.html',entries=entries)
 
+@app.route('/')
+def landing_page():
+    return render_template('landing.html')
 
 @app.route('/add', methods=['POST'])
 def add_entry():
@@ -107,4 +117,4 @@ def login():
 def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
-    return redirect(url_for('show_entries'))
+    return redirect(url_for('landing_page'))
